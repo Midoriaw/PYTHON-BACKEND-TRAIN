@@ -1,0 +1,227 @@
+[
+ {
+  "id": "sum_even",
+  "title": "Сумма чётных",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Верни сумму только чётных чисел списка nums. Функция sum_even(nums).",
+  "hints": [
+   "Заведи переменную-накопитель и прибавляй к ней в цикле, если число чётное.",
+   "total = 0\nfor n in nums:\n    if n % 2 == 0:\n        total += n\nreturn total"
+  ],
+  "cheat": [
+   "total = 0",
+   "for n in nums:",
+   "    if n % 2 == 0:",
+   "        total += n        # накопитель",
+   "sum([1, 2, 3])            # 6, встроенная сумма"
+  ],
+  "template": [
+   "def sum_even(nums):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "sum_even",
+  "tests": [
+   [
+    [
+     [
+      1,
+      2,
+      3,
+      4
+     ]
+    ],
+    6
+   ],
+   [
+    [
+     [
+      1,
+      3
+     ]
+    ],
+    0
+   ]
+  ]
+ },
+ {
+  "id": "reverse_str",
+  "title": "Реверс строки",
+  "kind": "write",
+  "difficulty": 1,
+  "description": "Разверни строку задом наперёд. Функция reverse_str(text).",
+  "hints": [
+   "У срезов есть шаг. Отрицательный шаг идёт с конца.",
+   "return text[::-1]"
+  ],
+  "cheat": [
+   "s[::-1]        # строка задом наперёд",
+   "list(s)        # ['a', 'b', 'c']",
+   "''.join(lst)   # собрать строку из списка"
+  ],
+  "template": [
+   "def reverse_str(text):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "reverse_str",
+  "tests": [
+   [
+    [
+     "abc"
+    ],
+    "cba"
+   ],
+   [
+    [
+     "123"
+    ],
+    "321"
+   ]
+  ]
+ },
+ {
+  "id": "palindrome",
+  "title": "Палиндром",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Проверь, читается ли строка одинаково в обе стороны. Функция is_palindrome(text).",
+  "hints": [
+   "Сравни строку с её реверсом.",
+   "return text == text[::-1]"
+  ],
+  "cheat": [
+   "s == s[::-1]      # строка равна своему реверсу",
+   "s.lower()         # привести к одному регистру"
+  ],
+  "template": [
+   "def is_palindrome(text):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "is_palindrome",
+  "tests": [
+   [
+    [
+     "aba"
+    ],
+    true
+   ],
+   [
+    [
+     "abc"
+    ],
+    false
+   ],
+   [
+    [
+     ""
+    ],
+    true
+   ]
+  ]
+ },
+ {
+  "id": "fizzbuzz",
+  "title": "FizzBuzz",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "На 3 вернуть 'Fizz', на 5 'Buzz', на 15 'FizzBuzz', иначе число строкой. Функция fizz_buzz(n).",
+  "hints": [
+   "Сначала проверяй самое строгое условие (кратность 15), иначе оно никогда не сработает.",
+   "if n % 15 == 0: ...\nelif n % 3 == 0: ...\nelif n % 5 == 0: ...\nelse: return str(n)"
+  ],
+  "cheat": [
+   "n % 15 == 0       # кратно 15?",
+   "str(n)            # число в строку",
+   "if ...: return    # return сразу завершает функцию",
+   "elif ...: return"
+  ],
+  "template": [
+   "def fizz_buzz(n):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "fizz_buzz",
+  "tests": [
+   [
+    [
+     3
+    ],
+    "Fizz"
+   ],
+   [
+    [
+     15
+    ],
+    "FizzBuzz"
+   ],
+   [
+    [
+     2
+    ],
+    "2"
+   ],
+   [
+    [
+     5
+    ],
+    "Buzz"
+   ]
+  ]
+ },
+ {
+  "id": "prime_check",
+  "title": "Простое число",
+  "kind": "write",
+  "difficulty": 3,
+  "description": "Проверь, простое ли число. Функция is_prime(n). Числа меньше 2 простыми не считаются.",
+  "hints": [
+   "Простое число не делится ни на что, кроме 1 и себя. Достаточно проверять делители до корня из n.",
+   "if n < 2: return False\nfor d in range(2, int(n ** 0.5) + 1):\n    if n % d == 0:\n        return False\nreturn True"
+  ],
+  "cheat": [
+   "int(n ** 0.5)         # целая часть корня",
+   "range(2, k + 1)       # делители от 2 до k",
+   "return False          # досрочный выход из функции"
+  ],
+  "template": [
+   "def is_prime(n):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "is_prime",
+  "tests": [
+   [
+    [
+     7
+    ],
+    true
+   ],
+   [
+    [
+     8
+    ],
+    false
+   ],
+   [
+    [
+     1
+    ],
+    false
+   ],
+   [
+    [
+     2
+    ],
+    true
+   ]
+  ]
+ }
+]

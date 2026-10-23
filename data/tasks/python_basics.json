@@ -1,0 +1,601 @@
+[
+ {
+  "id": "hello",
+  "title": "Вывод: print",
+  "kind": "write",
+  "difficulty": 1,
+  "description": "Выведи на экран фразу Hello World.",
+  "hints": [
+   "Нужна функция print().",
+   "print('Hello World')"
+  ],
+  "cheat": [
+   "print('текст')            # вывод строки",
+   "print('a', 'b')           # через пробел: a b",
+   "print(1 + 2)              # можно выводить результат выражения"
+  ],
+  "template": [
+   "# Выведи Hello World"
+  ],
+  "type": "stdout",
+  "expected_stdout": "Hello World"
+ },
+ {
+  "id": "variables",
+  "title": "Переменные и f-строки",
+  "kind": "write",
+  "difficulty": 1,
+  "description": "Создай переменную name со значением 'Python' и выведи фразу «Изучаю Python», подставив переменную в f-строку.",
+  "hints": [
+   "Сначала переменная: name = 'Python'.",
+   "print(f'Изучаю {name}')"
+  ],
+  "cheat": [
+   "name = 'Python'               # имя = значение",
+   "print(f'Привет, {name}')      # f-строка подставляет значение в {}"
+  ],
+  "template": [
+   "# Объяви переменную name и выведи фразу"
+  ],
+  "type": "stdout",
+  "expected_stdout": "Изучаю Python"
+ },
+ {
+  "id": "predict_types",
+  "title": "Что выведет? Типы",
+  "kind": "predict",
+  "difficulty": 1,
+  "description": "Прочитай код и выбери, что он выведет. Запускать ничего не нужно.",
+  "hints": [],
+  "cheat": [
+   "5          # int, целое",
+   "5.0        # float, дробное",
+   "'5'        # str, строка",
+   "True       # bool",
+   "10 / 2     # 5.0   всегда float",
+   "10 // 2    # 5     целое деление"
+  ],
+  "type": "quiz",
+  "code": [
+   "print(type(5), type(5.0))",
+   "print(10 / 2)"
+  ],
+  "options": [
+   "<class 'int'> <class 'int'>\n5",
+   "<class 'int'> <class 'float'>\n5.0",
+   "<class 'float'> <class 'float'>\n5.0",
+   "<class 'int'> <class 'float'>\n5"
+  ],
+  "answer": 1,
+  "explain": "5 это int, 5.0 это float. Обычное деление / всегда даёт float, даже если делится нацело."
+ },
+ {
+  "id": "math_sum",
+  "title": "Функция и return",
+  "kind": "write",
+  "difficulty": 1,
+  "description": "Напиши функцию sum_nums(a, b), которая возвращает сумму двух чисел.",
+  "hints": [
+   "Результат функции отдаёт return.",
+   "def sum_nums(a, b):\n    return a + b"
+  ],
+  "cheat": [
+   "def name(a, b):        # def, имя, параметры, двоеточие",
+   "    return a + b       # return отдаёт результат наружу"
+  ],
+  "template": [
+   "def sum_nums(a, b):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "sum_nums",
+  "tests": [
+   [
+    [
+     2,
+     2
+    ],
+    4
+   ],
+   [
+    [
+     10,
+     -5
+    ],
+    5
+   ],
+   [
+    [
+     0,
+     0
+    ],
+    0
+   ]
+  ]
+ },
+ {
+  "id": "is_even",
+  "title": "Остаток и сравнение",
+  "kind": "write",
+  "difficulty": 1,
+  "description": "Напиши функцию is_even(n): True, если число чётное, иначе False.",
+  "hints": [
+   "Нужен оператор остатка %.",
+   "return n % 2 == 0"
+  ],
+  "cheat": [
+   "17 % 5      # 2    остаток от деления",
+   "17 // 5     # 3    целая часть",
+   "2 ** 3      # 8    степень",
+   "x == 0      # сравнение (два =), а не присваивание"
+  ],
+  "template": [
+   "def is_even(n):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "is_even",
+  "tests": [
+   [
+    [
+     2
+    ],
+    true
+   ],
+   [
+    [
+     3
+    ],
+    false
+   ],
+   [
+    [
+     0
+    ],
+    true
+   ]
+  ]
+ },
+ {
+  "id": "fill_ops",
+  "title": "Допиши операторы",
+  "kind": "fill",
+  "difficulty": 1,
+  "description": "Замени каждое ___ на оператор, чтобы вывелось 3, затем 2, затем 289.",
+  "hints": [
+   "Целая часть от деления это //, остаток это %.",
+   "Ответ по порядку: //, %, **"
+  ],
+  "cheat": [
+   "17 // 5     # 3   целая часть",
+   "17 % 5      # 2   остаток",
+   "17 ** 2     # 289 степень"
+  ],
+  "template": [
+   "a, b = 17, 5",
+   "print(a ___ b)   # целая часть от деления -> 3",
+   "print(a ___ b)   # остаток -> 2",
+   "print(a ___ 2)   # степень -> 289"
+  ],
+  "type": "stdout",
+  "expected_stdout": "3\n2\n289"
+ },
+ {
+  "id": "grade",
+  "title": "if / elif / else",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Напиши функцию grade(score): 'A' при score >= 90, 'B' при score >= 75, иначе 'C'.",
+  "hints": [
+   "Условия проверяются сверху вниз: начни с самого строгого.",
+   "if score >= 90: return 'A'\nelif score >= 75: return 'B'\nelse: return 'C'"
+  ],
+  "cheat": [
+   "if x >= 90:",
+   "    ...",
+   "elif x >= 75:",
+   "    ...",
+   "else:",
+   "    ..."
+  ],
+  "template": [
+   "def grade(score):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "grade",
+  "tests": [
+   [
+    [
+     95
+    ],
+    "A"
+   ],
+   [
+    [
+     80
+    ],
+    "B"
+   ],
+   [
+    [
+     50
+    ],
+    "C"
+   ],
+   [
+    [
+     90
+    ],
+    "A"
+   ],
+   [
+    [
+     75
+    ],
+    "B"
+   ]
+  ]
+ },
+ {
+  "id": "predict_if",
+  "title": "Что выведет? Условия",
+  "kind": "predict",
+  "difficulty": 2,
+  "description": "Прочитай код и выбери, что он выведет. Запускать ничего не нужно.",
+  "hints": [],
+  "cheat": [
+   "if условие1:      # проверяется первым",
+   "    ...",
+   "elif условие2:    # только если первое ложно",
+   "    ...",
+   "else:             # если все ложны",
+   "    ..."
+  ],
+  "type": "quiz",
+  "code": [
+   "x = 7",
+   "if x > 10:",
+   "    print('big')",
+   "elif x > 5:",
+   "    print('mid')",
+   "else:",
+   "    print('small')"
+  ],
+  "options": [
+   "big",
+   "mid",
+   "small",
+   "mid и small"
+  ],
+  "answer": 1,
+  "explain": "Проверка идёт сверху вниз и останавливается на первом истинном условии: 7 > 10 ложь, 7 > 5 истина, и на этом всё."
+ },
+ {
+  "id": "loop_print",
+  "title": "Цикл for и range",
+  "kind": "write",
+  "difficulty": 1,
+  "description": "Выведи числа от 1 до 5, каждое на новой строке. Используй for и range().",
+  "hints": [
+   "range(1, 6) даёт 1, 2, 3, 4, 5: конец не включается.",
+   "for i in range(1, 6):\n    print(i)"
+  ],
+  "cheat": [
+   "for i in range(5):          # 0, 1, 2, 3, 4",
+   "for i in range(1, 6):       # 1..5 (конец не включается)",
+   "for i in range(0, 10, 3):   # 0, 3, 6, 9 (шаг 3)",
+   "for x in [10, 20]:          # по элементам списка"
+  ],
+  "template": [
+   "# цикл от 1 до 5"
+  ],
+  "type": "stdout",
+  "expected_stdout": "1\n2\n3\n4\n5"
+ },
+ {
+  "id": "fill_range",
+  "title": "Допиши range",
+  "kind": "fill",
+  "difficulty": 1,
+  "description": "Замени ___ так, чтобы цикл вывел 2, 5, 8.",
+  "hints": [
+   "Нужна функция, которая выдаёт числа с шагом: range(старт, конец, шаг).",
+   "range"
+  ],
+  "cheat": [
+   "range(2, 11, 3)    # 2, 5, 8   (старт, конец не включается, шаг)"
+  ],
+  "template": [
+   "for i in ___(2, 11, 3):",
+   "    print(i)"
+  ],
+  "type": "stdout",
+  "expected_stdout": "2\n5\n8"
+ },
+ {
+  "id": "str_methods",
+  "title": "Методы строк",
+  "kind": "write",
+  "difficulty": 1,
+  "description": "Напиши функцию shout(text): убери пробелы по краям, переведи в верхний регистр и добавь в конец '!'.",
+  "hints": [
+   "Методы цепочкой: text.strip().upper().",
+   "return text.strip().upper() + '!'"
+  ],
+  "cheat": [
+   "s = '  Hello '",
+   "s.strip()                # 'Hello'  без пробелов по краям",
+   "s.upper()   s.lower()    # регистр",
+   "s.replace('l', 'L')      # замена",
+   "'a,b,c'.split(',')       # ['a', 'b', 'c']",
+   "'-'.join(['a', 'b'])     # 'a-b'"
+  ],
+  "template": [
+   "def shout(text):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "shout",
+  "tests": [
+   [
+    [
+     "  hi "
+    ],
+    "HI!"
+   ],
+   [
+    [
+     "python"
+    ],
+    "PYTHON!"
+   ],
+   [
+    [
+     " a"
+    ],
+    "A!"
+   ]
+  ]
+ },
+ {
+  "id": "slice_fill",
+  "title": "Срезы",
+  "kind": "fill",
+  "difficulty": 2,
+  "description": "Верни каждый второй символ строки: из 'abcdef' получится 'ace'. Замени ___ на срез.",
+  "hints": [
+   "Срез: [старт:конец:шаг]. Старт и конец можно не писать.",
+   "text[::2]"
+  ],
+  "cheat": [
+   "s = 'python'",
+   "s[0]        # 'p'      первый символ",
+   "s[-1]       # 'n'      последний",
+   "s[1:4]      # 'yth'    от 1 до 4 (конец не включается)",
+   "s[:2]       # 'py'",
+   "s[::2]      # 'pto'    каждый второй",
+   "s[::-1]     # 'nohtyp' задом наперёд"
+  ],
+  "template": [
+   "def every_second(text):",
+   "    return text[___]"
+  ],
+  "type": "function",
+  "func_name": "every_second",
+  "tests": [
+   [
+    [
+     "abcdef"
+    ],
+    "ace"
+   ],
+   [
+    [
+     "xyz"
+    ],
+    "xz"
+   ],
+   [
+    [
+     ""
+    ],
+    ""
+   ]
+  ]
+ },
+ {
+  "id": "default_args",
+  "title": "Аргументы по умолчанию",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Напиши power(base, exp): возводит base в степень exp. Если exp не передан, возводит в квадрат.",
+  "hints": [
+   "Значение по умолчанию пишут в параметре: exp=2.",
+   "def power(base, exp=2):\n    return base ** exp"
+  ],
+  "cheat": [
+   "def greet(name, greeting='Привет'):     # значение по умолчанию",
+   "    return f'{greeting}, {name}'",
+   "greet('Аня')                  # 'Привет, Аня'",
+   "greet('Аня', greeting='Hi')   # именованный аргумент"
+  ],
+  "template": [
+   "def power(base, exp):",
+   "    # exp по умолчанию должен быть 2",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "power",
+  "tests": [
+   [
+    [
+     3
+    ],
+    9
+   ],
+   [
+    [
+     2,
+     3
+    ],
+    8
+   ],
+   [
+    [
+     5,
+     0
+    ],
+    1
+   ]
+  ]
+ },
+ {
+  "id": "bug_sum_to",
+  "title": "Найди баг: сумма",
+  "kind": "bug",
+  "difficulty": 2,
+  "description": "Функция должна вернуть сумму чисел от 1 до n включительно, но считает неверно. Найди и исправь ошибку.",
+  "hints": [
+   "Что именно выдаёт range(5)? Посмотри на первое и последнее число.",
+   "range(n) идёт от 0 до n-1. Нужно range(1, n + 1)."
+  ],
+  "cheat": [
+   "range(5)          # 0, 1, 2, 3, 4   (с нуля, 5 не входит)",
+   "range(1, 6)       # 1, 2, 3, 4, 5",
+   "range(1, n + 1)   # от 1 до n включительно"
+  ],
+  "template": [
+   "def sum_to(n):",
+   "    total = 0",
+   "    for i in range(n):",
+   "        total += i",
+   "    return total"
+  ],
+  "type": "function",
+  "func_name": "sum_to",
+  "tests": [
+   [
+    [
+     5
+    ],
+    15
+   ],
+   [
+    [
+     1
+    ],
+    1
+   ],
+   [
+    [
+     0
+    ],
+    0
+   ]
+  ]
+ },
+ {
+  "id": "square_list",
+  "title": "Список и цикл",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Верни новый список, где каждое число из nums возведено в квадрат. Функция square_list(nums).",
+  "hints": [
+   "Создай пустой список и добавляй в него через append.",
+   "result = []\nfor n in nums:\n    result.append(n * n)\nreturn result"
+  ],
+  "cheat": [
+   "nums = [1, 2, 3]",
+   "nums.append(4)              # добавить в конец",
+   "result = []",
+   "for n in nums:",
+   "    result.append(n * 2)    # собираем новый список",
+   "len(nums)                   # длина: 4"
+  ],
+  "template": [
+   "def square_list(nums):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "square_list",
+  "tests": [
+   [
+    [
+     [
+      1,
+      2,
+      3
+     ]
+    ],
+    [
+     1,
+     4,
+     9
+    ]
+   ],
+   [
+    [
+     [
+      0
+     ]
+    ],
+    [
+     0
+    ]
+   ]
+  ]
+ },
+ {
+  "id": "try_except",
+  "title": "try / except",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Напиши safe_div(a, b): возвращает a / b, а при делении на ноль возвращает None, не падая с ошибкой.",
+  "hints": [
+   "Деление на ноль вызывает ZeroDivisionError. Оберни деление в try.",
+   "try:\n    return a / b\nexcept ZeroDivisionError:\n    return None"
+  ],
+  "cheat": [
+   "try:",
+   "    x = 10 / 0",
+   "except ZeroDivisionError:     # ловим конкретную ошибку",
+   "    x = None"
+  ],
+  "template": [
+   "def safe_div(a, b):",
+   "    # твой код с try/except",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "safe_div",
+  "tests": [
+   [
+    [
+     10,
+     2
+    ],
+    5.0
+   ],
+   [
+    [
+     5,
+     0
+    ],
+    null
+   ],
+   [
+    [
+     9,
+     3
+    ],
+    3.0
+   ]
+  ]
+ }
+]

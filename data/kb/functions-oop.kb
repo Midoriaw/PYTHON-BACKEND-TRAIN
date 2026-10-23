@@ -1,0 +1,486 @@
+@ def-basic | функции | Функции: def и return
+? как создать функцию; def; что такое функция; как написать функцию; return; функция в python; объявление функции; вернуть значение из функции; как вызвать функцию
+# функция def return вызов параметр
+= Функция объявляется словом `def`, за ним имя, параметры в скобках и двоеточие. Тело с отступом. `return` отдаёт результат наружу и завершает функцию. Вызов: `имя(аргументы)`.
+> def add(a, b):
+>     return a + b
+>
+> result = add(2, 3)
+> print(result)    # 5
+! Функция без `return` возвращает `None`. `print` внутри функции только показывает значение, но не возвращает его.
++ Код внутри функции не выполняется, пока её не вызовут.
+~ return-vs-print default-args func-scope
+en: A function is declared with `def name(params):`. `return` hands a result back and ends the function.
+
+@ return-vs-print | функции | return и print: в чём разница
+? return или print; чем отличается return от print; функция возвращает none; почему функция вернула none; print вместо return; вернуть значение; результат функции none
+# return print none разница
+= `print` показывает значение на экране, но функция при этом всё равно вернёт `None`. `return` передаёт значение тому, кто вызвал функцию: его можно сохранить, сравнить, использовать дальше. В задачах с функциями проверяется именно **возвращённое** значение.
+> def bad(a, b):
+>     print(a + b)       # только показывает
+>
+> def good(a, b):
+>     return a + b       # возвращает
+>
+> x = bad(1, 2)          # напечатает 3, x = None
+> y = good(1, 2)         # y = 3
+! После `return` код функции дальше не выполняется.
+~ def-basic
+
+@ default-args | функции | Аргументы по умолчанию и именованные
+? аргументы по умолчанию; именованные аргументы; keyword arguments; значение по умолчанию в функции; позиционные аргументы; параметры функции; необязательный параметр
+# аргумент параметр умолчанию keyword
+= У параметра можно задать значение по умолчанию: тогда его можно не передавать. Аргументы можно передавать по позиции или по имени. Параметры со значениями идут после обязательных.
+> def power(base, exp=2):
+>     return base ** exp
+>
+> print(power(3))          # 9
+> print(power(2, 3))       # 8
+> print(power(exp=3, base=2))   # 8, по именам порядок не важен
+! Изменяемые значения по умолчанию (`[]`, `{}`) использовать нельзя.
+~ list-mutable-default args-kwargs
+
+@ args-kwargs | функции | *args и **kwargs
+? args kwargs; произвольное число аргументов; звёздочка в параметрах; переменное число аргументов; *args; **kwargs; функция с любым количеством аргументов
+# args kwargs звёздочка аргументы
+= `*args` собирает лишние позиционные аргументы в кортеж, `**kwargs` лишние именованные в словарь.
+> def info(*args, **kwargs):
+>     print(args, kwargs)
+>
+> info(1, 2, a=3)    # (1, 2) {'a': 3}
+>
+> def total(*nums):
+>     return sum(nums)
+> print(total(1, 2, 3))   # 6
+~ unpacking default-args
+
+@ func-scope | функции | Область видимости переменных
+? область видимости; локальные и глобальные переменные; global; scope; переменная внутри функции; почему не видна переменная; nonlocal; unboundlocalerror
+# scope global local область видимости
+= Переменная, созданная внутри функции, **локальная**: снаружи её не видно. Читать внешние переменные функция может, а присваивать им значение нет (нужно `global`, но лучше передавать параметры и возвращать результат).
+> total = 0          # глобальная
+> def add(n):
+>     return total + n    # читать можно
+> def broken():
+>     print(total)        # UnboundLocalError: ниже идёт присваивание
+>     total = 5
+! Если в функции есть присваивание `x = ...`, то `x` считается локальной во всей функции.
++ Хороший стиль: функция получает данные параметрами и возвращает результат, без `global`.
+~ def-basic errors-unboundlocal
+
+@ lambda-basic | функции | Лямбда-функции
+? lambda; анонимная функция; лямбда; лямбда выражение; функция в одну строку; lambda x; что такое lambda
+# lambda анонимная функция
+= `lambda параметры: выражение` это маленькая функция без имени из одного выражения. Часто используется как `key` в сортировке.
+> square = lambda x: x * x
+> print(square(4))     # 16
+> print(sorted(['bb', 'a', 'ccc'], key=lambda s: len(s)))   # ['a', 'bb', 'ccc']
++ Если логика сложнее одного выражения, пиши обычную `def`.
+~ sorted-key map-filter
+
+@ map-filter | функции | map, filter, any, all
+? map; filter; any; all; применить функцию ко всем элементам; map и filter; функции высшего порядка; проверить все элементы; хотя бы один элемент
+# map filter any all
+= `map(f, xs)` применяет функцию к каждому элементу, `filter(f, xs)` оставляет подходящие. Они возвращают итераторы, превращай в список через `list()`. `all(...)` истинно, если истинны все, `any(...)` если хотя бы один.
+> nums = [1, 2, 3, 4]
+> print(list(map(lambda x: x * 2, nums)))        # [2, 4, 6, 8]
+> print(list(filter(lambda x: x % 2 == 0, nums)))  # [2, 4]
+> print(all(n > 0 for n in nums))     # True
+> print(any(n > 3 for n in nums))     # True
++ Те же задачи часто читаются лучше со списковым включением.
+~ list-comprehension lambda-basic
+
+@ recursion-basic | функции | Рекурсия
+? рекурсия; функция вызывает саму себя; факториал рекурсией; базовый случай; recursion; recursionerror; фибоначчи рекурсивно
+# рекурсия recursion факториал базовый случай
+= Рекурсия это функция, которая вызывает саму себя. У неё обязательно должен быть **базовый случай** (условие остановки) и шаг, приближающий к нему.
+> def factorial(n):
+>     if n <= 1:          # базовый случай
+>         return 1
+>     return n * factorial(n - 1)
+> print(factorial(5))     # 120
+! Без базового случая будет RecursionError. Глубина ограничена примерно 1000 вызовов.
+~ errors-recursion
+
+@ closures | функции | Замыкания
+? замыкание; closure; функция внутри функции; вложенная функция; функция возвращает функцию; nonlocal
+# замыкание closure вложенная функция
+= Замыкание это вложенная функция, которая запоминает переменные внешней функции даже после её завершения.
+> def make_multiplier(k):
+>     def mul(x):
+>         return x * k
+>     return mul
+> double = make_multiplier(2)
+> print(double(5))   # 10
+~ decorators-basic
+
+@ decorators-basic | функции | Декораторы
+? декоратор; @ в python; decorator; что такое декоратор; как написать декоратор; собачка над функцией; functools wraps
+# декоратор decorator @ wraps
+= Декоратор это функция, которая принимает функцию и возвращает новую, расширенную. Запись `@decorator` над `def` значит `f = decorator(f)`. В FastAPI так объявляют маршруты: `@app.get('/')`.
+> import functools
+> def log(func):
+>     @functools.wraps(func)
+>     def wrapper(*args, **kwargs):
+>         print('вызов', func.__name__)
+>         return func(*args, **kwargs)
+>     return wrapper
+>
+> @log
+> def hello():
+>     return 'hi'
+~ closures fastapi-routes
+
+@ generator-basic | итераторы | Генераторы и yield
+? генератор; yield; что такое генератор; ленивые вычисления; generator; итератор; функция с yield; next
+# генератор yield generator итератор
+= Функция с `yield` возвращает не список, а генератор: значения выдаются по одному, по мере запроса. Экономит память на больших данных.
+> def count_up(n):
+>     i = 1
+>     while i <= n:
+>         yield i
+>         i += 1
+> for x in count_up(3):
+>     print(x)          # 1 2 3
+> g = count_up(2)
+> print(next(g), next(g))   # 1 2
+! Генератор можно пройти только один раз.
+~ generator-expr list-comprehension
+
+@ generator-expr | итераторы | Генераторное выражение
+? генераторное выражение; sum с генератором; круглые скобки вместо квадратных; генератор в одну строку
+# генератор выражение comprehension
+= Как списковое включение, но в круглых скобках: значения вычисляются лениво и не хранятся целиком. Хорошо подходит как аргумент для `sum`, `max`, `any`, `all`.
+> print(sum(n * n for n in range(1000)))
+> print(any(w.startswith('a') for w in ['bob', 'ann']))   # True
+~ generator-basic
+
+@ class-basic | ООП | Классы и объекты
+? что такое класс; как создать класс; class; объект; ооп; init; self; создать экземпляр класса; объектно-ориентированное программирование
+# класс class объект self init ооп
+= Класс это шаблон, объект (экземпляр) создаётся по шаблону. `__init__` вызывается при создании объекта и задаёт его поля, `self` это сам объект. Функции внутри класса называются методами.
+> class Dog:
+>     def __init__(self, name):
+>         self.name = name
+>
+>     def bark(self):
+>         return f'{self.name}: гав!'
+>
+> d = Dog('Рекс')
+> print(d.bark())    # Рекс: гав!
+! Первым параметром любого метода должен быть `self`, иначе будет TypeError про лишний аргумент.
+~ class-attrs inheritance-basic dunder-str
+en: A class is a template for objects. `__init__` initializes a new object, `self` refers to the object itself.
+
+@ class-attrs | ООП | Атрибуты класса и объекта
+? атрибут класса; атрибуты экземпляра; self.name; переменные класса; общие поля класса; атрибуты объекта
+# атрибут класс объект self
+= Атрибуты экземпляра создаются через `self.имя` внутри методов и свои у каждого объекта. Атрибуты класса объявляются прямо в теле класса и общие для всех объектов.
+> class Counter:
+>     total = 0              # общий для всех
+>     def __init__(self):
+>         self.value = 0     # свой у каждого
+>         Counter.total += 1
+> a, b = Counter(), Counter()
+> print(Counter.total)       # 2
+~ class-basic
+
+@ inheritance-basic | ООП | Наследование
+? наследование; inheritance; как унаследовать класс; super; родительский класс; переопределить метод; дочерний класс
+# наследование inheritance super класс
+= Дочерний класс получает методы и поля родителя: `class Child(Parent)`. `super()` вызывает версию родителя. Метод можно переопределить.
+> class Animal:
+>     def speak(self):
+>         return '...'
+> class Cat(Animal):
+>     def speak(self):
+>         return 'мяу'
+> print(Cat().speak())    # мяу
+~ class-basic
+
+@ dunder-str | ООП | __str__ и __repr__
+? __str__; __repr__; как вывести объект красиво; print объекта; магические методы; dunder methods; строковое представление объекта
+# str repr dunder магические методы
+= `__str__` задаёт текст для `print(obj)`, `__repr__` техническое представление для отладки. Без них печатается что-то вроде `<__main__.Dog object at 0x...>`.
+> class P:
+>     def __init__(self, x):
+>         self.x = x
+>     def __str__(self):
+>         return f'P({self.x})'
+> print(P(5))     # P(5)
+~ class-basic
+
+@ staticmethod-classmethod | ООП | staticmethod и classmethod
+? staticmethod; classmethod; статический метод; метод класса; @classmethod; cls
+# staticmethod classmethod cls
+= `@classmethod` получает класс (`cls`) вместо экземпляра: удобен для альтернативных конструкторов. `@staticmethod` не получает ничего: просто функция внутри класса.
+> class User:
+>     def __init__(self, name):
+>         self.name = name
+>     @classmethod
+>     def from_dict(cls, d):
+>         return cls(d['name'])
+>     @staticmethod
+>     def is_valid(name):
+>         return bool(name)
+> print(User.from_dict({'name': 'Аня'}).name)   # Аня
+~ class-basic
+
+@ property-basic | ООП | property
+? property; геттер сеттер; @property; вычисляемое свойство; приватные поля; инкапсуляция
+# property геттер сеттер инкапсуляция
+= `@property` превращает метод в атрибут только для чтения: вызываешь без скобок. Через `@имя.setter` можно добавить проверку при записи.
+> class Circle:
+>     def __init__(self, r):
+>         self.r = r
+>     @property
+>     def area(self):
+>         return 3.14 * self.r ** 2
+> print(Circle(2).area)    # 12.56
+
+@ dataclass-basic | ООП | dataclass
+? dataclass; класс для хранения данных; dataclasses; простая структура; автоматический init
+# dataclass данные структура
+= `@dataclass` сам создаёт `__init__`, `__repr__` и сравнение по полям. Идеально для классов, которые просто хранят данные.
+> from dataclasses import dataclass
+> @dataclass
+> class Point:
+>     x: int
+>     y: int = 0
+> print(Point(3))    # Point(x=3, y=0)
+~ pydantic-basic
+
+@ try-except | исключения | try / except
+? как обработать ошибку; try except; перехват исключений; обработка исключений; как поймать ошибку; чтобы программа не падала; try except else finally; обработка ошибок
+# try except исключение ошибка finally
+= В `try` пишут код, который может упасть, в `except` указывают тип ошибки и действие. `else` выполняется, если ошибки не было, `finally` выполняется всегда.
+> try:
+>     n = int('abc')
+> except ValueError:
+>     n = 0
+>     print('не число')
+> else:
+>     print('всё хорошо')
+> finally:
+>     print('конец')
+! Голый `except:` ловит вообще всё, даже опечатки в коде. Указывай конкретный тип ошибки.
+~ raise-basic errors-read-traceback
+en: Put risky code in `try`, handle specific errors in `except`. `else` runs if no error, `finally` always runs.
+
+@ raise-basic | исключения | raise: вызвать ошибку
+? raise; вызвать исключение; выбросить ошибку; свое исключение; создать своё исключение; throw
+# raise исключение выбросить
+= `raise Тип('сообщение')` намеренно вызывает исключение. Свои типы ошибок наследуют от `Exception`.
+> def divide(a, b):
+>     if b == 0:
+>         raise ValueError('делитель не может быть 0')
+>     return a / b
+>
+> class MyError(Exception):
+>     pass
+~ try-except
+
+@ errors-read-traceback | исключения | Как читать traceback
+? как читать ошибку; traceback; что значит эта ошибка; как понять сообщение об ошибке; стек вызовов; читать ошибку python
+# traceback ошибка стек читать
+= Читай traceback **снизу вверх**: последняя строка это тип и текст ошибки (что случилось), строка выше показывает файл, номер строки и код (где). Остальное это цепочка вызовов.
+> # NameError: name 'x' is not defined   <- ЧТО случилось
+> #   File "main.py", line 3, in <module> <- ГДЕ
+> #     print(x)
+~ debug-print
+
+@ errors-valueerror | исключения | ValueError
+? valueerror; invalid literal for int; не удалось преобразовать; int abc; ошибка значения
+# valueerror int
+= `ValueError` возникает, когда тип значения подходит, а само значение нет: `int('abc')`, распаковка не того числа элементов, `math.sqrt(-1)`. Защита: проверять данные заранее или оборачивать в `try / except ValueError`.
+> try:
+>     n = int('abc')
+> except ValueError:
+>     n = 0
+~ convert-types try-except
+
+@ errors-keyerror | исключения | KeyError
+? keyerror; ошибка ключа; нет ключа в словаре; keyerror что это
+# keyerror словарь ключ
+= `KeyError` значит, что в словаре нет такого ключа. Используй `d.get(key)`, `key in d` или `try / except KeyError`.
+> d = {'a': 1}
+> print(d.get('b', 0))   # 0, без ошибки
+~ dict-get
+
+@ errors-indexerror | исключения | IndexError
+? indexerror; list index out of range; индекс за пределами; выход за границы списка; index out of range; string index out of range
+# indexerror индекс список
+= `IndexError: list index out of range` значит, что индекс больше или равен длине списка (или пустой список). Допустимы индексы `0 … len-1`. Проверь границы цикла и пустой ли список.
+> a = [1, 2, 3]
+> print(a[len(a) - 1])    # последний элемент, индекс 2
+> # print(a[3])           # IndexError
+~ zero-based off-by-one
+
+@ errors-typeerror | исключения | TypeError
+? typeerror; unsupported operand type; can only concatenate str; нельзя сложить число и строку; takes positional arguments but; object is not callable; not subscriptable
+# typeerror тип ошибка
+= `TypeError` возникает, когда операция применена к значению неподходящего типа. Чаще всего: сложение строки с числом (приведи через `str()` или `int()`), неверное число аргументов функции, вызов не-функции `()` или `None[0]`.
+> age = 25
+> # print('Мне ' + age)           # TypeError
+> print('Мне ' + str(age))        # Мне 25
+> print(f'Мне {age}')             # Мне 25
+~ convert-types
+
+@ errors-attributeerror | исключения | AttributeError
+? attributeerror; нет атрибута; no attribute; nonetype has no attribute; нет метода; object has no attribute
+# attributeerror атрибут метод nonetype
+= `AttributeError` значит, что у объекта нет такого метода или поля: опечатка, метод другого типа или объект равен `None`. Если сообщение `'NoneType' object has no attribute`, значит, функция вернула `None` (забыт `return`) или ты записал результат метода, который возвращает `None` (`sort`, `append`).
+> a = [3, 1, 2]
+> a = a.sort()      # None!
+> # a.append(1)     # AttributeError: 'NoneType' ...
+~ none-type list-sort
+
+@ errors-nameerror | исключения | NameError
+? nameerror; name is not defined; не определено имя; переменная не определена; name not defined
+# nameerror переменная имя
+= `NameError: name 'x' is not defined`: имя `x` нигде не создано до этого места. Причины: опечатка, переменная создана позже или в другой функции, строка написана без кавычек.
+> total = 0
+> # print(totl)    # NameError, опечатка
+> print(total)
+~ func-scope
+
+@ errors-unboundlocal | исключения | UnboundLocalError
+? unboundlocalerror; local variable referenced before assignment; переменная до присваивания
+# unboundlocalerror переменная функция
+= В функции есть присваивание этой переменной, значит, она локальная, а прочитана до присваивания. Передай значение параметром или объяви `global` (хуже).
+~ func-scope
+
+@ errors-indentation | исключения | IndentationError
+? indentationerror; unexpected indent; expected an indented block; ошибка отступа; unindent does not match
+# indentationerror отступ
+= `IndentationError` это неправильные отступы: нет отступа после двоеточия, лишний отступ, или смесь пробелов и табов. Решение: 4 пробела на уровень, везде одинаково.
+~ indentation
+
+@ errors-syntaxerror | исключения | SyntaxError
+? syntaxerror; invalid syntax; синтаксическая ошибка; expected colon; пропущено двоеточие; forgot a comma; unterminated string
+# syntaxerror синтаксис
+= `SyntaxError` значит, что Python не смог прочитать код. Частые причины: нет двоеточия после `if/for/def`, незакрытая скобка или кавычка, `=` вместо `==` в условии, пропущенная запятая.
+> x = 5
+> if x == 5:      # двоеточие обязательно
+>     print('пять')
+! Строка с ошибкой в сообщении иногда указана на одну выше или ниже настоящей: смотри и соседние.
+
+@ errors-zerodivision | исключения | ZeroDivisionError
+? zerodivisionerror; деление на ноль; division by zero; делить на 0
+# zerodivisionerror деление ноль
+= `ZeroDivisionError` возникает при делении на 0 (`/`, `//`, `%`). Проверяй делитель или перехватывай ошибку.
+> def safe_div(a, b):
+>     try:
+>         return a / b
+>     except ZeroDivisionError:
+>         return None
+~ try-except
+
+@ errors-recursion | исключения | RecursionError
+? recursionerror; maximum recursion depth exceeded; бесконечная рекурсия; слишком глубокая рекурсия
+# recursionerror рекурсия
+= Функция вызывает себя слишком глубоко: нет базового случая или он недостижим. Проверь условие остановки и то, что аргумент приближается к нему.
+~ recursion-basic
+
+@ errors-importerror | исключения | ImportError и ModuleNotFoundError
+? modulenotfounderror; no module named; importerror; не найден модуль; не могу импортировать
+# modulenotfounderror importerror модуль
+= Python не нашёл модуль: опечатка, модуль не установлен (`pip install ...`) или свой файл назван так же, как стандартный модуль. В тренажёре доступны только безопасные модули: `math`, `random`, `json`, `re`, `datetime`, `collections`, `itertools`, `functools`, `string`, `enum`, `typing`, `fastapi`, `pydantic`.
+
+@ json-basic | стандартная библиотека | Модуль json
+? json; как работать с json; json dumps loads; словарь в json; строка в словарь; сериализация; разобрать json; десериализация
+# json dumps loads сериализация
+= `json.dumps(obj)` превращает словарь или список в JSON-строку, `json.loads(text)` разбирает строку обратно. В JSON ключи это строки, `None` становится `null`, `True` становится `true`.
+> import json
+> s = json.dumps({'a': 1, 'b': [True, None]})
+> print(s)                    # {"a": 1, "b": [true, null]}
+> print(json.loads(s)['a'])   # 1
++ `indent=2` и `ensure_ascii=False` делают вывод читаемым и сохраняют русские буквы.
+~ nested-structures
+
+@ regex-basic | стандартная библиотека | Регулярные выражения: re
+? регулярные выражения; re; regex; поиск по шаблону; re.findall; re.sub; re.match; как найти числа в строке
+# regex re шаблон поиск
+= Модуль `re`: `re.search(шаблон, строка)` ищет первое совпадение, `re.findall` возвращает все, `re.sub` заменяет, `re.match` проверяет начало. Шаблон лучше писать сырой строкой `r'...'`.
+> import re
+> print(re.findall(r'\d+', 'a1b22c333'))        # ['1', '22', '333']
+> print(re.sub(r'\s+', ' ', 'a   b    c'))      # a b c
+> print(bool(re.match(r'\w+@\w+\.\w+', 'a@b.ru')))   # True
++ `\d` цифра, `\w` буква или цифра, `\s` пробел, `+` один и более, `*` ноль и более, `?` необязательно.
+
+@ itertools-basic | стандартная библиотека | itertools
+? itertools; комбинации; перестановки; permutations; combinations; product; chain; бесконечный итератор
+# itertools комбинации перестановки
+= `itertools` даёт готовые комбинаторные инструменты: `permutations`, `combinations`, `product` (декартово произведение), `chain` (склеить итерируемые), `groupby`, `count`.
+> from itertools import combinations, permutations, chain
+> print(list(combinations([1, 2, 3], 2)))   # [(1, 2), (1, 3), (2, 3)]
+> print(len(list(permutations('abc'))))     # 6
+> print(list(chain([1], [2, 3])))           # [1, 2, 3]
+
+@ enum-basic | стандартная библиотека | Enum
+? enum; перечисление; константы набором; статусы enum
+# enum перечисление
+= `Enum` задаёт набор именованных констант: удобно для статусов, ролей, типов.
+> from enum import Enum
+> class Status(Enum):
+>     NEW = 'new'
+>     DONE = 'done'
+> print(Status.DONE.value)   # done
+> print(Status('new'))       # Status.NEW
+
+@ typing-basic | типы | Аннотации типов (typing)
+? аннотации типов; type hints; typing; Optional; List; как указать тип параметра; подсказки типов; тип возвращаемого значения; Union
+# typing аннотации type hints optional
+= Аннотации типов описывают, что ожидается: `def f(x: int) -> str:`. Python их не проверяет при запуске, но IDE, линтеры (`mypy`) и FastAPI их используют. `Optional[str]` значит «строка или `None`». В новых версиях пишут `str | None`, `list[int]`.
+> from typing import Optional
+> def greet(name: str, times: int = 1) -> str:
+>     return ('Привет, ' + name + '! ') * times
+> def find(items: list[int], x: int) -> Optional[int]:
+>     return items.index(x) if x in items else None
+~ pydantic-basic
+
+@ context-manager | основы | with и контекстные менеджеры
+? with; контекстный менеджер; with open; как открыть файл; закрыть файл автоматически; as в with
+# with контекст файл open
+= `with` гарантирует, что ресурс (файл, соединение, блокировка) корректно закроется, даже если внутри случится ошибка. Самый частый пример это файл. В тренажёре файлы отключены.
+> # with open('data.txt', encoding='utf-8') as f:
+> #     text = f.read()
+~ try-except
+
+@ testing-basic | инструменты | Тесты: pytest и assert
+? тесты; pytest; assert; как писать тесты; юнит тесты; проверка кода; тестирование
+# тест pytest assert тестирование
+= Тест это функция, которая вызывает твой код и проверяет результат через `assert`. `pytest` сам находит функции `test_*` и показывает, какие упали.
+> def add(a, b):
+>     return a + b
+>
+> def test_add():
+>     assert add(2, 3) == 5
+>     assert add(-1, 1) == 0
++ Для FastAPI используют `TestClient`: он вызывает эндпоинты без запуска сервера.
+~ fastapi-testing
+
+@ venv-pip | инструменты | pip и виртуальное окружение
+? pip; venv; виртуальное окружение; как установить библиотеку; pip install; requirements txt; зависимости проекта; virtualenv
+# pip venv окружение установка
+= `pip install пакет` ставит библиотеку. Чтобы проекты не мешали друг другу, для каждого создают виртуальное окружение: `python -m venv .venv`, затем активируют его. Список зависимостей хранят в `requirements.txt`.
+> # python -m venv .venv
+> # .venv\Scripts\activate        (Windows)
+> # source .venv/bin/activate     (Linux, macOS)
+> # pip install fastapi uvicorn
+> # pip freeze > requirements.txt
+
+@ python-version-how | основы | Как запустить Python-файл
+? как запустить программу; python main.py; запуск скрипта; как запустить python файл; запустить код; интерпретатор
+# запуск python скрипт интерпретатор
+= Сохрани код в файл `main.py` и запусти в терминале: `python main.py` (или `python3 main.py`). Интерактивный режим открывается командой `python`.
+> # python main.py
+
+@ if-name-main | основы | if __name__ == "__main__"
+? if __name__ == __main__; что значит name main; точка входа; main функция
+# __name__ main точка входа
+= Условие `if __name__ == '__main__':` выполняет код только при прямом запуске файла, а не при его импорте как модуля. Туда кладут запуск программы.
+> def main():
+>     print('привет')
+> if __name__ == '__main__':
+>     main()

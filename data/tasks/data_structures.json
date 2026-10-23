@@ -1,0 +1,427 @@
+[
+ {
+  "id": "dict_basics",
+  "title": "Словарь: доступ по ключу",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Напиши get_age(users, name): возраст из словаря users по имени, а если имени нет, верни None.",
+  "hints": [
+   "Прямой доступ users[name] падает с KeyError, если ключа нет. Есть безопасный метод.",
+   "return users.get(name)"
+  ],
+  "cheat": [
+   "user = {'name': 'Аня', 'age': 25}",
+   "user['name']              # 'Аня'  (KeyError, если ключа нет)",
+   "user.get('city')          # None, если ключа нет",
+   "user.get('city', '-')     # значение по умолчанию",
+   "user['city'] = 'Москва'   # добавить или изменить",
+   "'age' in user             # True, проверка ключа"
+  ],
+  "template": [
+   "def get_age(users, name):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "get_age",
+  "tests": [
+   [
+    [
+     {
+      "Anna": 25,
+      "Bob": 30
+     },
+     "Anna"
+    ],
+    25
+   ],
+   [
+    [
+     {
+      "Anna": 25
+     },
+     "Max"
+    ],
+    null
+   ]
+  ]
+ },
+ {
+  "id": "predict_dict",
+  "title": "Что выведет? Словарь",
+  "kind": "predict",
+  "difficulty": 2,
+  "description": "Прочитай код и выбери, что он выведет. Запускать ничего не нужно.",
+  "hints": [],
+  "cheat": [
+   "d['c'] = 3          # новый ключ добавляется",
+   "d['a'] = 10         # существующий перезаписывается",
+   "len(d)              # число ключей",
+   "d.get('z', 0)       # 0, если ключа нет"
+  ],
+  "type": "quiz",
+  "code": [
+   "d = {'a': 1, 'b': 2}",
+   "d['c'] = 3",
+   "d['a'] = 10",
+   "print(len(d), d.get('z', 0), d['a'])"
+  ],
+  "options": [
+   "3 None 10",
+   "3 0 10",
+   "4 0 1",
+   "2 0 10"
+  ],
+  "answer": 1,
+  "explain": "Ключей стало три (a, b, c). Ключа 'z' нет, поэтому get вернёт запасное 0. А значение 'a' перезаписали на 10."
+ },
+ {
+  "id": "list_comp_filter",
+  "title": "Списковые включения",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Напиши positive_only(nums): через списковое включение верни только числа больше 0.",
+  "hints": [
+   "Форма: [x for x in nums if условие].",
+   "return [n for n in nums if n > 0]"
+  ],
+  "cheat": [
+   "[n * 2 for n in nums]                # преобразовать каждый",
+   "[n for n in nums if n > 0]           # отфильтровать",
+   "[n * n for n in nums if n % 2 == 0]  # и то и другое"
+  ],
+  "template": [
+   "def positive_only(nums):",
+   "    # твой код (списковое включение)",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "positive_only",
+  "tests": [
+   [
+    [
+     [
+      1,
+      -2,
+      3,
+      -4,
+      0
+     ]
+    ],
+    [
+     1,
+     3
+    ]
+   ],
+   [
+    [
+     [
+      -1,
+      -2
+     ]
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "id": "fill_comp",
+  "title": "Допиши включение",
+  "kind": "fill",
+  "difficulty": 2,
+  "description": "Верни квадраты только нечётных чисел. Замени ___ на условие.",
+  "hints": [
+   "Нечётное число даёт остаток 1 при делении на 2.",
+   "n % 2 == 1"
+  ],
+  "cheat": [
+   "[n * n for n in nums if n % 2 == 0]   # условие после for"
+  ],
+  "template": [
+   "def odd_squares(nums):",
+   "    return [n * n for n in nums if ___]"
+  ],
+  "type": "function",
+  "func_name": "odd_squares",
+  "tests": [
+   [
+    [
+     [
+      1,
+      2,
+      3,
+      4,
+      5
+     ]
+    ],
+    [
+     1,
+     9,
+     25
+    ]
+   ],
+   [
+    [
+     [
+      2,
+      4
+     ]
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "id": "word_count",
+  "title": "Подсчёт слов",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Напиши word_count(text): словарь {слово: сколько раз встретилось}. Слова разделены пробелами.",
+  "hints": [
+   "Разбей текст на слова: text.split(). Для каждого слова увеличивай счётчик в словаре.",
+   "counts[w] = counts.get(w, 0) + 1"
+  ],
+  "cheat": [
+   "words = text.split()              # ['a', 'b', 'a']",
+   "counts = {}",
+   "for w in words:",
+   "    counts[w] = counts.get(w, 0) + 1   # классический подсчёт"
+  ],
+  "template": [
+   "def word_count(text):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "word_count",
+  "tests": [
+   [
+    [
+     "a b a c b a"
+    ],
+    {
+     "a": 3,
+     "b": 2,
+     "c": 1
+    }
+   ],
+   [
+    [
+     "hello"
+    ],
+    {
+     "hello": 1
+    }
+   ]
+  ]
+ },
+ {
+  "id": "nested_dict",
+  "title": "Вложенные структуры",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Дан список словарей users (у каждого есть 'name' и 'city'). Верни имена людей из города 'Москва'. Функция people_from_moscow(users).",
+  "hints": [
+   "Обращайся к полям словаря по ключу: u['city'].",
+   "return [u['name'] for u in users if u['city'] == 'Москва']"
+  ],
+  "cheat": [
+   "users = [{'name': 'Аня', 'city': 'Москва'}]",
+   "users[0]['name']                                       # 'Аня'",
+   "[u['name'] for u in users if u['city'] == 'Москва']   # фильтр + выбор поля"
+  ],
+  "template": [
+   "def people_from_moscow(users):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "people_from_moscow",
+  "tests": [
+   [
+    [
+     [
+      {
+       "name": "Аня",
+       "city": "Москва"
+      },
+      {
+       "name": "Пётр",
+       "city": "Казань"
+      },
+      {
+       "name": "Ира",
+       "city": "Москва"
+      }
+     ]
+    ],
+    [
+     "Аня",
+     "Ира"
+    ]
+   ]
+  ]
+ },
+ {
+  "id": "sort_by_key",
+  "title": "Сортировка по ключу",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Дан список кортежей (имя, возраст). Верни список имён, отсортированный по возрасту по возрастанию. Функция sort_by_age(people).",
+  "hints": [
+   "sorted умеет принимать key=: функцию, по которой сравнивать.",
+   "ordered = sorted(people, key=lambda p: p[1])\nreturn [p[0] for p in ordered]"
+  ],
+  "cheat": [
+   "sorted([3, 1, 2])                        # [1, 2, 3] новый список",
+   "sorted(people, key=lambda p: p[1])       # по второму элементу",
+   "sorted(nums, reverse=True)               # по убыванию"
+  ],
+  "template": [
+   "def sort_by_age(people):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "sort_by_age",
+  "tests": [
+   [
+    [
+     [
+      [
+       "Bob",
+       30
+      ],
+      [
+       "Anna",
+       25
+      ],
+      [
+       "Max",
+       40
+      ]
+     ]
+    ],
+    [
+     "Anna",
+     "Bob",
+     "Max"
+    ]
+   ]
+  ]
+ },
+ {
+  "id": "set_ops",
+  "title": "Множества",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Напиши common_items(a, b): отсортированный список элементов, которые есть и в a, и в b.",
+  "hints": [
+   "Пересечение множеств: set(a) & set(b).",
+   "return sorted(set(a) & set(b))"
+  ],
+  "cheat": [
+   "a = {1, 2, 3}; b = {3, 4}",
+   "a & b             # {3}          пересечение",
+   "a | b             # {1, 2, 3, 4} объединение",
+   "a - b             # {1, 2}       разность",
+   "set([1, 1, 2])    # {1, 2}       убрать дубли"
+  ],
+  "template": [
+   "def common_items(a, b):",
+   "    # твой код",
+   "    pass"
+  ],
+  "type": "function",
+  "func_name": "common_items",
+  "tests": [
+   [
+    [
+     [
+      1,
+      2,
+      3,
+      4
+     ],
+     [
+      3,
+      4,
+      5
+     ]
+    ],
+    [
+     3,
+     4
+    ]
+   ],
+   [
+    [
+     [
+      1,
+      2
+     ],
+     [
+      3,
+      4
+     ]
+    ],
+    []
+   ]
+  ]
+ },
+ {
+  "id": "bug_mutable",
+  "title": "Найди баг: общий список",
+  "kind": "bug",
+  "difficulty": 3,
+  "description": "add_item(item, items=[]) должна возвращать список с добавленным элементом, но при повторных вызовах в нём копятся старые значения. Исправь так, чтобы вызов без items всегда начинал с пустого списка.",
+  "hints": [
+   "Значение по умолчанию создаётся один раз, при объявлении функции, и дальше переиспользуется.",
+   "Ставь items=None, а внутри:\nif items is None:\n    items = []"
+  ],
+  "cheat": [
+   "def f(x, items=None):      # [] или {} по умолчанию не ставим",
+   "    if items is None:",
+   "        items = []",
+   "    items.append(x)",
+   "    return items"
+  ],
+  "template": [
+   "def add_item(item, items=[]):",
+   "    items.append(item)",
+   "    return items"
+  ],
+  "type": "function",
+  "func_name": "add_item",
+  "tests": [
+   [
+    [
+     1
+    ],
+    [
+     1
+    ]
+   ],
+   [
+    [
+     2
+    ],
+    [
+     2
+    ]
+   ],
+   [
+    [
+     3,
+     [
+      9
+     ]
+    ],
+    [
+     9,
+     3
+    ]
+   ]
+  ]
+ }
+]

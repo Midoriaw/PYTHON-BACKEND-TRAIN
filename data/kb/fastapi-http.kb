@@ -1,0 +1,430 @@
+@ http-basics | HTTP | Что такое HTTP-запрос и ответ
+? что такое http; как работает http; запрос и ответ; клиент сервер; http протокол; как браузер общается с сервером; request response
+# http запрос ответ клиент сервер
+= HTTP это протокол «запрос — ответ». Клиент (браузер, приложение) отправляет запрос: метод, адрес, заголовки и, возможно, тело. Сервер возвращает ответ: статус-код, заголовки и тело (часто JSON).
+> # запрос:  GET /users/1 HTTP/1.1
+> # ответ:   200 OK
+> #          {"id": 1, "name": "Аня"}
+~ http-methods http-status-codes
+
+@ http-methods | HTTP | Методы HTTP: GET, POST, PUT, PATCH, DELETE
+? методы http; get post put delete; чем отличается get от post; put vs patch; http methods; какой метод использовать; patch или put; crud методы
+# get post put patch delete метод http crud
+= `GET` получить данные (без изменений на сервере), `POST` создать, `PUT` заменить целиком, `PATCH` изменить частично, `DELETE` удалить. Это основа CRUD: Create, Read, Update, Delete.
+> # GET    /users        список
+> # GET    /users/5      один пользователь
+> # POST   /users        создать
+> # PUT    /users/5      заменить целиком
+> # PATCH  /users/5      изменить часть полей
+> # DELETE /users/5      удалить
++ `GET`, `PUT`, `DELETE` идемпотентны: повторный вызов не меняет результат. `POST` нет: он создаёт новую запись каждый раз.
+~ http-status-codes rest-api
+en: GET reads, POST creates, PUT replaces, PATCH updates partially, DELETE removes.
+
+@ http-status-codes | HTTP | Коды ответа HTTP
+? коды ответа; статус коды http; что значит 404; что значит 500; 200 201 204; 400 401 403; коды ошибок http; http status; что такое 422; 404 not found
+# статус код 200 201 400 401 403 404 422 500
+= Группы: `2xx` успех, `3xx` перенаправление, `4xx` ошибка клиента, `5xx` ошибка сервера. Самые важные: `200` OK, `201` создано, `204` нет содержимого, `400` плохой запрос, `401` не авторизован, `403` доступ запрещён, `404` не найдено, `422` ошибка валидации данных, `500` внутренняя ошибка сервера.
+> from fastapi import FastAPI, HTTPException
+> app = FastAPI()
+>
+> @app.post('/items', status_code=201)      # создано
+> def create(): return {'ok': True}
+>
+> @app.get('/items/{i}')
+> def get(i: int):
+>     raise HTTPException(status_code=404, detail='Не найдено')
+! `401` значит «не знаю, кто ты» (нет логина), `403` значит «знаю, но тебе нельзя».
+~ http-methods fastapi-httpexception
+en: 2xx success, 3xx redirect, 4xx client error, 5xx server error. 404 Not Found, 422 validation error, 500 server error.
+
+@ rest-api | HTTP | REST API
+? что такое rest; rest api; как проектировать api; restful; ресурсы и эндпоинты; api дизайн
+# rest api ресурс эндпоинт
+= REST это стиль API: данные представлены ресурсами с понятными адресами (`/users`, `/users/5`), действия выражаются методами HTTP, ответ обычно в JSON. Имена ресурсов во множественном числе, без глаголов в адресе.
+> # хорошо: GET /users/5/orders
+> # плохо:  GET /getUserOrders?id=5
+~ http-methods api-basics
+
+@ api-basics | HTTP | Что такое API
+? что такое api; апи; эйпиай; интерфейс программирования; зачем нужен api; веб api
+# api интерфейс
+= API это набор адресов и правил, по которым одна программа общается с другой. Веб-API принимает HTTP-запросы и отвечает данными (чаще JSON).
+~ rest-api
+
+@ http-headers | HTTP | Заголовки HTTP
+? заголовки http; headers; content-type; authorization; как передать заголовок; header в fastapi; bearer токен
+# header заголовок content-type authorization
+= Заголовки это служебная информация запроса и ответа: `Content-Type` (формат тела), `Authorization` (токен доступа), `Accept`, `User-Agent`. В FastAPI заголовок читают через `Header`.
+> from fastapi import FastAPI, Header
+> app = FastAPI()
+> @app.get('/me')
+> def me(user_agent: str = Header(None)):
+>     return {'ua': user_agent}
+~ fastapi-routes
+
+@ cors-basic | HTTP | CORS
+? cors; ошибка cors; cross origin; blocked by cors policy; как разрешить cors fastapi; почему браузер блокирует запрос
+# cors origin браузер
+= CORS это правило браузера: страница с одного домена не может обращаться к API на другом, если сервер явно не разрешил. В FastAPI разрешают через `CORSMiddleware`.
+> from fastapi import FastAPI
+> from fastapi.middleware.cors import CORSMiddleware
+> app = FastAPI()
+> app.add_middleware(CORSMiddleware, allow_origins=['http://localhost:3000'],
+>                    allow_methods=['*'], allow_headers=['*'])
+! `allow_origins=['*']` удобно для разработки, но в продакшене перечисляй конкретные адреса.
+
+@ auth-basics | HTTP | Аутентификация и JWT
+? аутентификация; jwt; токен; авторизация; bearer; как сделать вход; логин api; oauth2; авторизация в fastapi
+# jwt токен аутентификация авторизация bearer
+= Аутентификация это «кто ты», авторизация это «что тебе можно». Типичная схема: пользователь входит по логину и паролю, сервер выдаёт токен (часто JWT), клиент присылает его в заголовке `Authorization: Bearer <токен>`. Пароли хранят только в виде хэша (bcrypt, argon2).
+> # Authorization: Bearer eyJhbGciOi...
+! Никогда не храни пароли в открытом виде и не клади секреты в код: используй переменные окружения.
+~ fastapi-depends
+
+@ fastapi-intro | FastAPI | Что такое FastAPI
+? что такое fastapi; fastapi; фастапи; зачем fastapi; веб фреймворк python; fastapi vs flask; как начать с fastapi
+# fastapi фреймворк
+= FastAPI это современный фреймворк для создания веб-API на Python. Он использует аннотации типов для проверки данных и сам строит документацию (`/docs`). Поддерживает `async`, быстрый.
+> from fastapi import FastAPI
+> app = FastAPI()
+>
+> @app.get('/')
+> def root():
+>     return {'message': 'Привет!'}
+~ fastapi-run fastapi-routes
+en: FastAPI is a modern Python framework for building web APIs; it uses type hints for validation and generates docs at /docs.
+
+@ fastapi-run | FastAPI | Как запустить FastAPI
+? как запустить fastapi; uvicorn; запуск сервера; uvicorn main app reload; fastapi dev; как открыть docs; запуск fastapi приложения
+# uvicorn запуск сервер reload docs
+= Сохрани приложение в `main.py` (переменная `app`) и запусти сервер: `uvicorn main:app --reload`. `--reload` перезапускает сервер при изменении кода. Интерактивная документация доступна на `http://127.0.0.1:8000/docs`.
+> # pip install fastapi uvicorn
+> # uvicorn main:app --reload
+~ fastapi-intro
+
+@ fastapi-routes | FastAPI | Маршруты (эндпоинты) FastAPI
+? как создать маршрут; app.get; эндпоинт fastapi; декоратор get; роут в fastapi; как сделать get запрос в fastapi; app.post; как объявить эндпоинт
+# маршрут эндпоинт route get post декоратор
+= Маршрут задаётся декоратором `@app.метод('/адрес')` над функцией: `@app.get`, `@app.post`, `@app.put`, `@app.patch`, `@app.delete`. Возвращённый `dict` или модель автоматически превращается в JSON.
+> from fastapi import FastAPI
+> app = FastAPI()
+>
+> @app.get('/ping')
+> def ping():
+>     return {'status': 'ok'}
+>
+> @app.post('/items')
+> def create_item():
+>     return {'created': True}
+~ fastapi-path-params fastapi-query-params fastapi-body
+
+@ fastapi-path-params | FastAPI | Параметры пути
+? параметр пути; path parameter; адрес с переменной; /items/{id}; как получить значение из url; параметры в адресе; path в fastapi
+# path параметр адрес url
+= Часть адреса в фигурных скобках становится параметром функции. Тип в аннотации задаёт проверку и преобразование: `item_id: int` превратит строку из адреса в число (а если там не число, вернёт 422).
+> @app.get('/items/{item_id}')
+> def get_item(item_id: int):
+>     return {'id': item_id}
+> # GET /items/5    -> {"id": 5}
+> # GET /items/abc  -> 422
+~ fastapi-query-params
+
+@ fastapi-query-params | FastAPI | Query-параметры
+? query параметры; параметры запроса; ?q=; как получить параметр из url; необязательный параметр; query в fastapi; фильтры в api; пагинация limit offset
+# query параметры запрос фильтр limit offset
+= Параметры функции, которых нет в адресе, считаются query-параметрами (`/search?q=python&limit=5`). Без значения по умолчанию параметр обязателен, со значением (в том числе `None`) необязателен.
+> from typing import Optional
+>
+> @app.get('/search')
+> def search(q: Optional[str] = None, limit: int = 10):
+>     return {'q': q, 'limit': limit}
+> # GET /search?q=py&limit=3
+~ fastapi-path-params fastapi-validation
+
+@ fastapi-body | FastAPI | Тело запроса и Pydantic-модели
+? тело запроса; request body; post json; pydantic модель; как принять json; body в fastapi; принять данные в post; модель данных
+# body json pydantic модель post
+= Чтобы принять JSON, опиши форму данных классом на основе `BaseModel` и укажи его типом параметра. FastAPI сам разберёт тело, проверит типы и вернёт 422, если данные неверны.
+> from pydantic import BaseModel
+>
+> class Item(BaseModel):
+>     name: str
+>     price: float
+>     in_stock: bool = True
+>
+> @app.post('/items')
+> def create(item: Item):
+>     return {'name': item.name, 'price': item.price}
+~ pydantic-basic fastapi-validation
+
+@ pydantic-basic | FastAPI | Pydantic
+? pydantic; basemodel; модель pydantic; валидация данных; field; вложенные модели; pydantic v2; model_dump
+# pydantic basemodel валидация модель
+= Pydantic проверяет данные по описанию из аннотаций и приводит типы (`'5'` станет `5`). Модели можно вкладывать друг в друга, ограничения задают через `Field`.
+> from pydantic import BaseModel, Field
+>
+> class Address(BaseModel):
+>     city: str
+> class User(BaseModel):
+>     name: str = Field(min_length=2)
+>     age: int = Field(ge=0, le=120)
+>     address: Address
+> u = User(name='Аня', age=25, address={'city': 'Москва'})
+> print(u.model_dump())   # {'name': 'Аня', 'age': 25, 'address': {'city': 'Москва'}}
+~ fastapi-body fastapi-validation
+
+@ fastapi-validation | FastAPI | Валидация и ошибка 422
+? ошибка 422; unprocessable entity; валидация в fastapi; query validation; ограничения параметров; Query; min_length; почему 422
+# 422 валидация query ограничения
+= Если данные не подходят под аннотации (нет обязательного поля, строка вместо числа), FastAPI сам вернёт `422` с описанием ошибок. Ограничения параметров задают через `Query`, `Path`, `Field`.
+> from fastapi import Query
+>
+> @app.get('/items')
+> def items(q: str = Query(min_length=3, max_length=20), page: int = Query(1, ge=1)):
+>     return {'q': q, 'page': page}
++ Текст 422 показывает, в каком поле и что не так, смотри `detail` в ответе.
+~ fastapi-body
+
+@ fastapi-httpexception | FastAPI | HTTPException
+? httpexception; как вернуть ошибку в fastapi; вернуть 404; raise httpexception; статус код ошибки; detail; как сделать 404 в fastapi
+# httpexception ошибка 404 detail
+= Чтобы вернуть ошибку клиенту, выбрось `HTTPException(status_code=..., detail='...')`. Выполнение функции прервётся, а клиент получит нужный статус.
+> from fastapi import FastAPI, HTTPException
+> app = FastAPI()
+> users = {1: 'Аня'}
+>
+> @app.get('/users/{uid}')
+> def get_user(uid: int):
+>     if uid not in users:
+>         raise HTTPException(status_code=404, detail='Пользователь не найден')
+>     return {'name': users[uid]}
+! Используй `raise`, а не `return HTTPException(...)`: возврат не создаст ошибку.
+~ http-status-codes
+
+@ fastapi-status-code | FastAPI | Статус-код ответа
+? status code fastapi; как задать код ответа; 201 created; изменить статус ответа; status_code в декораторе
+# status_code 201 статус
+= Код успешного ответа задаётся параметром декоратора: `@app.post('/items', status_code=201)`. Для ошибок используют `HTTPException`.
+> from fastapi import status
+> @app.post('/items', status_code=status.HTTP_201_CREATED)
+> def create(): return {'ok': True}
+~ http-status-codes fastapi-httpexception
+
+@ fastapi-response-model | FastAPI | response_model
+? response_model; модель ответа; скрыть поле в ответе; не возвращать пароль; фильтрация ответа; схема ответа
+# response_model ответ схема
+= `response_model` описывает форму ответа: FastAPI отфильтрует лишние поля и проверит результат. Так не вернёшь случайно пароль или внутренние данные.
+> class UserIn(BaseModel):
+>     name: str
+>     password: str
+> class UserOut(BaseModel):
+>     name: str
+>
+> @app.post('/users', response_model=UserOut)
+> def create(u: UserIn):
+>     return u        # пароль в ответ не попадёт
+~ fastapi-body
+
+@ fastapi-depends | FastAPI | Зависимости (Depends)
+? depends; зависимости fastapi; dependency injection; общая логика для эндпоинтов; get_db; авторизация depends; инъекция зависимостей
+# depends зависимость dependency
+= `Depends(функция)` подставляет в параметр результат другой функции. Так выносят повторяющуюся логику: сессию БД, текущего пользователя, проверку прав, общие параметры.
+> from fastapi import Depends
+>
+> def get_token(authorization: str = Header(None)):
+>     if not authorization:
+>         raise HTTPException(status_code=401, detail='Нужна авторизация')
+>     return authorization
+>
+> @app.get('/secret')
+> def secret(token: str = Depends(get_token)):
+>     return {'token': token}
+~ auth-basics db-session
+
+@ fastapi-async | FastAPI | async def или def
+? async def; асинхронный эндпоинт; async await; когда async; async в fastapi; блокирующий код; asyncio
+# async await асинхронный asyncio
+= Эндпоинт можно объявить через `def` или `async def`. `async def` выбирай, когда внутри используешь `await` (асинхронные драйверы БД, HTTP-клиенты). Обычный блокирующий код в `async def` вешает весь сервер, поэтому для него лучше простой `def`: FastAPI запустит его в потоке.
+> import asyncio
+>
+> @app.get('/slow')
+> async def slow():
+>     await asyncio.sleep(1)    # не блокирует сервер
+>     return {'done': True}
+! Не вызывай `time.sleep`, `requests.get` и тяжёлые вычисления внутри `async def`.
+~ asyncio-basic
+
+@ asyncio-basic | async | asyncio: async и await
+? asyncio; async await; что такое асинхронность; корутина; asyncio gather; параллельные запросы; event loop
+# asyncio async await корутина gather
+= `async def` создаёт корутину, `await` ждёт её результат, пока цикл событий выполняет другие задачи. `asyncio.gather` запускает несколько корутин одновременно. Асинхронность помогает при ожидании ввода-вывода (сеть, БД), но не ускоряет вычисления.
+> import asyncio
+> async def fetch(n):
+>     await asyncio.sleep(1)
+>     return n
+> async def main():
+>     print(await asyncio.gather(fetch(1), fetch(2)))   # за 1 секунду, а не за 2
+> # asyncio.run(main())
+~ fastapi-async
+
+@ fastapi-router | FastAPI | APIRouter: разделение на файлы
+? apirouter; как разбить fastapi на файлы; роутеры; структура проекта fastapi; include_router; prefix
+# apirouter router структура проект
+= `APIRouter` позволяет разнести эндпоинты по файлам. В основном приложении роутеры подключают через `app.include_router(router, prefix='/users')`.
+> from fastapi import APIRouter, FastAPI
+> router = APIRouter(prefix='/users', tags=['users'])
+> @router.get('/')
+> def list_users(): return []
+>
+> app = FastAPI()
+> app.include_router(router)
+
+@ fastapi-middleware | FastAPI | Middleware
+? middleware; промежуточный слой; логирование запросов; время ответа; app.middleware
+# middleware логирование
+= Middleware это код, который выполняется для каждого запроса до и после эндпоинта: логирование, замер времени, CORS.
+> import time
+> @app.middleware('http')
+> async def timing(request, call_next):
+>     t = time.time()
+>     response = await call_next(request)
+>     response.headers['X-Time'] = str(time.time() - t)
+>     return response
+
+@ fastapi-background | FastAPI | Фоновые задачи
+? background tasks; фоновая задача; отправить письмо после ответа; выполнить после ответа
+# background фоновая задача
+= `BackgroundTasks` запускает функцию после того, как ответ уже отправлен клиенту: письма, логи, лёгкая обработка.
+> from fastapi import BackgroundTasks
+> def send_email(to: str): ...
+> @app.post('/signup')
+> def signup(email: str, bg: BackgroundTasks):
+>     bg.add_task(send_email, email)
+>     return {'ok': True}
+
+@ fastapi-testing | FastAPI | Тестирование FastAPI
+? тесты fastapi; testclient; как протестировать api; тест эндпоинта; pytest fastapi
+# тест testclient pytest
+= `TestClient` вызывает эндпоинты без запуска сервера. Так устроена и проверка задач в этом тренажёре.
+> from fastapi.testclient import TestClient
+> client = TestClient(app)
+> def test_ping():
+>     r = client.get('/ping')
+>     assert r.status_code == 200
+>     assert r.json() == {'status': 'ok'}
+~ testing-basic
+
+@ fastapi-docs | FastAPI | Документация /docs и OpenAPI
+? docs; swagger; openapi; как посмотреть документацию api; redoc; интерактивная документация; /docs
+# docs swagger openapi redoc
+= FastAPI автоматически строит документацию: `/docs` (Swagger UI, можно отправлять запросы прямо из браузера), `/redoc` и схему `/openapi.json`. Описания берутся из аннотаций, docstring и параметров `summary`, `tags`.
+
+@ fastapi-form-file | FastAPI | Формы и загрузка файлов
+? загрузить файл fastapi; uploadfile; форма; form data; multipart; принять файл
+# file uploadfile form
+= Для файлов используют `UploadFile` и `File`, для полей формы `Form` (нужен пакет `python-multipart`).
+> from fastapi import File, UploadFile
+> @app.post('/upload')
+> async def upload(file: UploadFile = File(...)):
+>     data = await file.read()
+>     return {'name': file.filename, 'size': len(data)}
+
+@ env-variables | инструменты | Переменные окружения и секреты
+? переменные окружения; env; секреты; .env; настройки приложения; где хранить пароли; pydantic settings; os.environ
+# env секреты настройки dotenv
+= Пароли, ключи и адреса БД не пишут в код, а берут из переменных окружения (`os.environ`, файл `.env`, `pydantic-settings`). Файл `.env` добавляют в `.gitignore`.
+> import os
+> db_url = os.environ.get('DATABASE_URL', 'sqlite:///dev.db')
+
+@ sql-select | SQL | SQL: SELECT
+? select; sql запрос; выбрать данные из таблицы; where; order by; limit; как написать запрос; sql основы
+# sql select where order limit
+= `SELECT колонки FROM таблица WHERE условие ORDER BY колонка LIMIT n` читает данные.
+> -- SELECT name, age FROM users WHERE age >= 18 ORDER BY age DESC LIMIT 10;
+~ sql-join sql-insert-update
+
+@ sql-insert-update | SQL | SQL: INSERT, UPDATE, DELETE
+? insert; update; delete; добавить запись в таблицу; обновить запись; удалить запись sql; изменение данных
+# sql insert update delete
+= `INSERT INTO таблица (поля) VALUES (...)` добавляет строку, `UPDATE таблица SET поле = ... WHERE условие` меняет, `DELETE FROM таблица WHERE условие` удаляет.
+> -- INSERT INTO users (name, age) VALUES ('Аня', 25);
+> -- UPDATE users SET age = 26 WHERE name = 'Аня';
+> -- DELETE FROM users WHERE id = 5;
+! Без `WHERE` `UPDATE` и `DELETE` затронут **все** строки таблицы.
+
+@ sql-join | SQL | SQL: JOIN
+? join; соединить таблицы; inner join; left join; объединение таблиц; связи таблиц; foreign key; внешний ключ
+# sql join таблицы связь foreign key
+= `JOIN` соединяет строки двух таблиц по ключу. `INNER JOIN` оставляет только совпадающие, `LEFT JOIN` сохраняет все строки левой таблицы (без пары будет `NULL`). Связь задаёт внешний ключ (`FOREIGN KEY`).
+> -- SELECT u.name, o.total
+> -- FROM users u
+> -- JOIN orders o ON o.user_id = u.id;
+
+@ sql-group-by | SQL | SQL: GROUP BY и агрегаты
+? group by; count sum avg; агрегатные функции; группировка в sql; having; сколько записей
+# sql group by count sum avg
+= `GROUP BY` группирует строки, а агрегаты `COUNT`, `SUM`, `AVG`, `MIN`, `MAX` считают по группе. Условие по результату агрегата пишут в `HAVING`, а не в `WHERE`.
+> -- SELECT city, COUNT(*) FROM users GROUP BY city HAVING COUNT(*) > 10;
+
+@ sql-injection | SQL | SQL-инъекции
+? sql инъекция; sql injection; безопасность sql; параметризованные запросы; подстановка в запрос; взлом через форму
+# sql инъекция безопасность
+= Никогда не собирай SQL-запрос склейкой строк с пользовательскими данными: можно подставить свой код. Используй параметризованные запросы или ORM.
+> # плохо:   f"SELECT * FROM users WHERE name = '{name}'"
+> # хорошо:  cursor.execute("SELECT * FROM users WHERE name = ?", (name,))
+
+@ primary-key-index | SQL | Первичный ключ и индекс
+? primary key; первичный ключ; индекс; index; ускорить запрос; уникальный; unique; автоинкремент
+# primary key индекс unique
+= Первичный ключ однозначно идентифицирует строку (обычно `id`). Индекс ускоряет поиск по колонке, но замедляет запись и занимает место, поэтому его создают по часто используемым в `WHERE` и `JOIN` полям.
+
+@ orm-basics | SQL | ORM и SQLAlchemy
+? orm; sqlalchemy; что такое orm; работа с базой в python; модель таблицы; session; sqlalchemy 2.0; mapped
+# orm sqlalchemy модель база
+= ORM связывает таблицы с классами Python: строка таблицы это объект. В SQLAlchemy 2.0 модель описывают через `DeclarativeBase`, `Mapped` и `mapped_column`, а запросы строят через `select()`.
+> from sqlalchemy import select
+> from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
+> class Base(DeclarativeBase): ...
+> class User(Base):
+>     __tablename__ = 'users'
+>     id: Mapped[int] = mapped_column(primary_key=True)
+>     name: Mapped[str]
+> # with Session(engine) as s:
+> #     users = s.scalars(select(User).where(User.name == 'Аня')).all()
+~ db-session
+
+@ db-session | SQL | Сессия БД в FastAPI
+? сессия базы данных; get_db; depends сессия; подключить базу к fastapi; sessionmaker; как использовать бд в fastapi
+# сессия бд session depends
+= Сессию БД выдают через зависимость: она открывается на запрос и гарантированно закрывается.
+> def get_db():
+>     db = SessionLocal()
+>     try:
+>         yield db
+>     finally:
+>         db.close()
+>
+> @app.get('/users')
+> def users(db = Depends(get_db)):
+>     return db.scalars(select(User)).all()
+~ fastapi-depends orm-basics
+
+@ git-basics | инструменты | Git: основные команды
+? git; основные команды git; commit; push; pull; clone; ветки; branch; как сохранить изменения; git status; gitignore
+# git commit push pull branch
+= `git clone` скачать репозиторий, `git status` что изменилось, `git add .` подготовить, `git commit -m "текст"` сохранить версию, `git push` отправить на сервер, `git pull` забрать изменения, `git switch -c имя` новая ветка. Файлы, которые не нужно хранить (`.venv`, `.env`), перечисляют в `.gitignore`.
+> # git add .
+> # git commit -m "Добавил эндпоинт /ping"
+> # git push
+
+@ docker-basics | инструменты | Docker: основы
+? docker; докер; контейнер; dockerfile; docker compose; как упаковать приложение; образ и контейнер
+# docker контейнер dockerfile compose
+= Docker упаковывает приложение со всеми зависимостями в образ, а из образа запускаются контейнеры. Образ описывают в `Dockerfile`, несколько сервисов (приложение + БД) запускают через `docker compose up`.
+> # FROM python:3.12-slim
+> # WORKDIR /app
+> # COPY requirements.txt .
+> # RUN pip install -r requirements.txt
+> # COPY . .
+> # CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]

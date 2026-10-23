@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<title>Python Backend Trainer</title>
+<style>%%VENDOR_CSS%%</style>
+<style>%%APP_CSS%%</style>
+</head>
+<body>
+<div id="app">
+
+  <nav id="activity">
+    <button class="act active" id="act-tasks" title="Задачи (Ctrl+B)"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg></button>
+    <button class="act" id="act-stats" title="Статистика"><svg viewBox="0 0 24 24"><path d="M5 20V10M12 20V4M19 20v-7"/></svg></button>
+    <span class="grow"></span>
+    <button class="act" id="act-theme" title="Тема"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg></button>
+    <button class="act active" id="act-asst" title="Помощник (Ctrl+J)"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></button>
+  </nav>
+
+  <aside id="side">
+    <div class="side-head">
+      <span class="cap">Темы</span>
+      <input id="search" type="text" placeholder="Поиск задач…" autocomplete="off">
+    </div>
+    <div id="review-box" hidden><span id="rv-text"></span><button class="btn primary" id="rv-start">Повторить</button></div>
+    <div id="menu"></div>
+    <div class="side-foot">
+      <div id="pbar"><i id="pfill"></i></div>
+      <span id="plabel">0 / 0</span>
+    </div>
+  </aside>
+
+  <main id="center">
+    <div id="tabs">
+      <button class="tab active" id="tab-task">Выбери задачу</button>
+      <button class="tab" id="tab-stats">Статистика</button>
+    </div>
+
+    <section id="task-view">
+      <div id="task-card">
+        <div class="row">
+          <h2 id="title">Выбери задачу слева</h2>
+          <span id="kind" class="pill" hidden></span>
+          <span id="badge" hidden>решено</span>
+          <span id="dots"></span>
+          <span class="grow"></span>
+          <button class="btn ghost" id="hint-btn">Подсказка</button>
+          <button class="btn ghost" id="reset-btn">Сбросить</button>
+        </div>
+        <p id="desc">Прогресс сохраняется автоматически.</p>
+        <details id="cheat-wrap" open hidden><summary>Шпаргалка</summary><pre id="cheat"></pre></details>
+        <div id="hint-box" hidden></div>
+      </div>
+      <div id="editor-wrap"><textarea id="editor-textarea"></textarea></div>
+      <div id="panel">
+        <div class="panel-head">
+          <span class="cap">Вывод</span>
+          <span id="run-meta"></span>
+          <span class="grow"></span>
+          <button class="btn" id="next-btn" hidden>Дальше →</button>
+          <button class="btn primary" id="run-btn">▶ Запустить <kbd>Ctrl+Enter</kbd></button>
+        </div>
+        <div id="quiz" hidden></div>
+        <pre id="output">Нажми «Запустить», чтобы проверить решение.</pre>
+      </div>
+    </section>
+
+    <section id="stats-view" hidden>
+      <div class="stats-grid">
+        <div class="stat"><b id="s-done">0</b><span>решено</span></div>
+        <div class="stat"><b id="s-att">0</b><span>попыток</span></div>
+        <div class="stat"><b id="s-rate">0%</b><span>успешных</span></div>
+        <div class="stat"><b id="s-total">0</b><span>всего задач</span></div>
+        <div class="stat"><b id="s-streak">0</b><span>дней подряд</span></div>
+        <div class="stat"><b id="s-due">0</b><span>ждут повторения</span></div>
+      </div>
+      <div class="card" style="margin-bottom:18px">
+        <span class="cap">По темам</span>
+        <div id="cats"></div>
+      </div>
+      <div class="card">
+        <span class="cap">Активность, 14 дней</span>
+        <div id="chart"></div>
+      </div>
+    </section>
+  </main>
+
+  <aside id="asst">
+    <div class="side-head row">
+      <span class="cap">Помощник</span>
+      <span class="grow"></span>
+      <button class="mini" id="mtoggle" title="Показать / скрыть маскота">◐</button>
+    </div>
+    <div id="mascot-stage">
+      <div id="bubble"></div>
+      <img id="mascot-img" alt="" draggable="false">
+    </div>
+    <div id="char-ctl">
+      <label for="char-select">Character</label>
+      <select id="char-select"></select>
+      <label for="msize">Size</label>
+      <div class="sz"><input id="msize" type="range" min="100" max="280" step="10"><output id="msize-val">180 px</output></div>
+    </div>
+    <div id="chat"></div>
+    <div id="chips"></div>
+    <div id="chat-form">
+      <input id="chat-input" type="text" placeholder="Спроси про синтаксис или ошибку…" autocomplete="off">
+      <button class="btn primary" id="chat-send">↑</button>
+    </div>
+  </aside>
+
+  <footer id="status">
+    <span id="st-left">готов</span>
+    <span class="grow"></span>
+    <span id="st-right"></span>
+  </footer>
+</div>
+<div id="toast"></div>
+
+<script>%%VENDOR_JS%%</script>
+<script>%%APP_JS%%</script>
+</body>
+</html>

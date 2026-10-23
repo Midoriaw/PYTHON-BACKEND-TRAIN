@@ -1,0 +1,384 @@
+[
+ {
+  "id": "api_ping",
+  "title": "GET: первый эндпоинт",
+  "kind": "write",
+  "difficulty": 1,
+  "description": "Сделай GET /ping, который возвращает {'status': 'ok'}.",
+  "hints": [
+   "Нужен декоратор @app.get('/ping') над функцией.",
+   "@app.get('/ping')\ndef ping():\n    return {'status': 'ok'}"
+  ],
+  "cheat": [
+   "from fastapi import FastAPI",
+   "app = FastAPI()",
+   "",
+   "@app.get('/path')            # метод + адрес",
+   "def handler():",
+   "    return {'ключ': 'значение'}   # dict превращается в JSON"
+  ],
+  "template": [
+   "from fastapi import FastAPI",
+   "",
+   "app = FastAPI()",
+   "",
+   "# твой код"
+  ],
+  "type": "fastapi",
+  "endpoint": "/ping",
+  "method": "GET",
+  "expected_json": {
+   "status": "ok"
+  }
+ },
+ {
+  "id": "api_hello",
+  "title": "Параметр пути",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Сделай GET /hello/{name}, который возвращает {'msg': 'Hello, <name>'}. Например, для /hello/Alex это {'msg': 'Hello, Alex'}.",
+  "hints": [
+   "Часть адреса в фигурных скобках становится параметром функции.",
+   "@app.get('/hello/{name}')\ndef hello(name: str):\n    return {'msg': f'Hello, {name}'}"
+  ],
+  "cheat": [
+   "@app.get('/items/{item_id}')       # {…} в адресе = параметр",
+   "def get_item(item_id: int):        # тип в аннотации = авто-конвертация",
+   "    return {'id': item_id}"
+  ],
+  "template": [
+   "from fastapi import FastAPI",
+   "",
+   "app = FastAPI()",
+   "",
+   "# твой код"
+  ],
+  "type": "fastapi",
+  "checks": [
+   {
+    "endpoint": "/hello/Alex",
+    "method": "GET",
+    "expected_json": {
+     "msg": "Hello, Alex"
+    }
+   },
+   {
+    "endpoint": "/hello/Anna",
+    "method": "GET",
+    "expected_json": {
+     "msg": "Hello, Anna"
+    }
+   }
+  ]
+ },
+ {
+  "id": "api_add",
+  "title": "Несколько параметров пути",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Сделай GET /add/{a}/{b}, который возвращает {'sum': a + b}. Параметры должны быть числами.",
+  "hints": [
+   "Укажи тип int в аннотации, чтобы FastAPI превратил строки из адреса в числа.",
+   "@app.get('/add/{a}/{b}')\ndef add(a: int, b: int):\n    return {'sum': a + b}"
+  ],
+  "cheat": [
+   "@app.get('/add/{a}/{b}')",
+   "def add(a: int, b: int):      # int: '10' из адреса станет числом 10",
+   "    return {'sum': a + b}"
+  ],
+  "template": [
+   "from fastapi import FastAPI",
+   "",
+   "app = FastAPI()",
+   "",
+   "# твой код"
+  ],
+  "type": "fastapi",
+  "checks": [
+   {
+    "endpoint": "/add/10/5",
+    "method": "GET",
+    "expected_json": {
+     "sum": 15
+    }
+   },
+   {
+    "endpoint": "/add/2/3",
+    "method": "GET",
+    "expected_json": {
+     "sum": 5
+    }
+   }
+  ]
+ },
+ {
+  "id": "api_query",
+  "title": "Query-параметры",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Сделай GET /search с необязательным параметром q. Если q передан, верни {'query': q}, иначе {'query': 'empty'}.",
+  "hints": [
+   "Параметр со значением по умолчанию становится необязательным: q: Optional[str] = None.",
+   "@app.get('/search')\ndef search(q: Optional[str] = None):\n    return {'query': q if q else 'empty'}"
+  ],
+  "cheat": [
+   "from typing import Optional",
+   "",
+   "@app.get('/search')                       # адрес вида /search?q=python",
+   "def search(q: Optional[str] = None):      # = None делает параметр необязательным",
+   "    return {'query': q}"
+  ],
+  "template": [
+   "from fastapi import FastAPI",
+   "from typing import Optional",
+   "",
+   "app = FastAPI()",
+   "",
+   "# твой код"
+  ],
+  "type": "fastapi",
+  "checks": [
+   {
+    "endpoint": "/search?q=python",
+    "method": "GET",
+    "expected_json": {
+     "query": "python"
+    }
+   },
+   {
+    "endpoint": "/search",
+    "method": "GET",
+    "expected_json": {
+     "query": "empty"
+    }
+   }
+  ]
+ },
+ {
+  "id": "api_multi_query",
+  "title": "Обязательные query-параметры",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "Сделай GET /filter с обязательными параметрами category (строка) и limit (число). Для /filter?category=books&limit=2 верни {'category': 'books', 'limit': 2}.",
+  "hints": [
+   "Параметр без значения по умолчанию обязателен.",
+   "@app.get('/filter')\ndef flt(category: str, limit: int):\n    return {'category': category, 'limit': limit}"
+  ],
+  "cheat": [
+   "@app.get('/filter')",
+   "def flt(category: str, limit: int):    # без значения = обязательный",
+   "    ...",
+   "def flt2(category: str, limit: int = 10):   # со значением = необязательный",
+   "    ..."
+  ],
+  "template": [
+   "from fastapi import FastAPI",
+   "",
+   "app = FastAPI()",
+   "",
+   "# твой код"
+  ],
+  "type": "fastapi",
+  "checks": [
+   {
+    "endpoint": "/filter?category=books&limit=2",
+    "method": "GET",
+    "expected_json": {
+     "category": "books",
+     "limit": 2
+    }
+   },
+   {
+    "endpoint": "/filter?category=toys&limit=5",
+    "method": "GET",
+    "expected_json": {
+     "category": "toys",
+     "limit": 5
+    }
+   },
+   {
+    "endpoint": "/filter?category=books",
+    "method": "GET",
+    "expected_status": 422
+   }
+  ]
+ },
+ {
+  "id": "api_post_json",
+  "title": "POST и Pydantic",
+  "kind": "write",
+  "difficulty": 3,
+  "description": "Сделай POST /items. Он принимает JSON {'name': str, 'price': float} и возвращает его же плюс поле 'tax' (цена * 0.2).",
+  "hints": [
+   "Опиши форму JSON классом на BaseModel и поставь его типом параметра.",
+   "class Item(BaseModel):\n    name: str\n    price: float\n\n@app.post('/items')\ndef create(item: Item):\n    return {'name': item.name, 'price': item.price, 'tax': item.price * 0.2}"
+  ],
+  "cheat": [
+   "from pydantic import BaseModel",
+   "",
+   "class Item(BaseModel):            # форма JSON",
+   "    name: str",
+   "    price: float",
+   "",
+   "@app.post('/items')",
+   "def create(item: Item):           # тело запроса разбирается само",
+   "    return item.name"
+  ],
+  "template": [
+   "from fastapi import FastAPI",
+   "from pydantic import BaseModel",
+   "",
+   "app = FastAPI()",
+   "",
+   "# твой код"
+  ],
+  "type": "fastapi",
+  "checks": [
+   {
+    "endpoint": "/items",
+    "method": "POST",
+    "payload": {
+     "name": "Laptop",
+     "price": 1000.0
+    },
+    "expected_json": {
+     "name": "Laptop",
+     "price": 1000.0,
+     "tax": 200.0
+    }
+   },
+   {
+    "endpoint": "/items",
+    "method": "POST",
+    "payload": {
+     "name": "Pen",
+     "price": 50.0
+    },
+    "expected_json": {
+     "name": "Pen",
+     "price": 50.0,
+     "tax": 10.0
+    }
+   }
+  ]
+ },
+ {
+  "id": "api_status_code",
+  "title": "Статус-коды",
+  "kind": "write",
+  "difficulty": 2,
+  "description": "POST /create должен вернуть статус 201 и JSON {'status': 'done'}.",
+  "hints": [
+   "Статус указывается прямо в декораторе.",
+   "@app.post('/create', status_code=201)\ndef create():\n    return {'status': 'done'}"
+  ],
+  "cheat": [
+   "@app.post('/create', status_code=201)    # код ответа в декораторе",
+   "def create():",
+   "    return {'status': 'done'}"
+  ],
+  "template": [
+   "from fastapi import FastAPI",
+   "",
+   "app = FastAPI()",
+   "",
+   "# твой код"
+  ],
+  "type": "fastapi",
+  "endpoint": "/create",
+  "method": "POST",
+  "expected_status": 201,
+  "expected_json": {
+   "status": "done"
+  }
+ },
+ {
+  "id": "api_404",
+  "title": "Ошибка 404",
+  "kind": "write",
+  "difficulty": 3,
+  "description": "GET /users/{user_id}: существует только user_id == 1 (верни {'id': 1, 'name': 'Admin'}). Для остальных верни статус 404.",
+  "hints": [
+   "Ошибку HTTP выбрасывают через raise HTTPException.",
+   "if user_id == 1:\n    return {'id': 1, 'name': 'Admin'}\nraise HTTPException(status_code=404, detail='Not found')"
+  ],
+  "cheat": [
+   "from fastapi import HTTPException",
+   "",
+   "raise HTTPException(status_code=404, detail='Not found')   # ответ 404"
+  ],
+  "template": [
+   "from fastapi import FastAPI, HTTPException",
+   "",
+   "app = FastAPI()",
+   "",
+   "# твой код"
+  ],
+  "type": "fastapi",
+  "checks": [
+   {
+    "endpoint": "/users/1",
+    "method": "GET",
+    "expected_status": 200,
+    "expected_json": {
+     "id": 1,
+     "name": "Admin"
+    }
+   },
+   {
+    "endpoint": "/users/2",
+    "method": "GET",
+    "expected_status": 404
+   }
+  ]
+ },
+ {
+  "id": "api_put",
+  "title": "PUT: обновление",
+  "kind": "write",
+  "difficulty": 3,
+  "description": "PUT /items/{item_id} принимает JSON {'name': str} и возвращает {'item_id': item_id, 'name': name}.",
+  "hints": [
+   "Нужны и параметр пути item_id, и тело запроса (модель Pydantic).",
+   "class Upd(BaseModel):\n    name: str\n\n@app.put('/items/{item_id}')\ndef update(item_id: int, body: Upd):\n    return {'item_id': item_id, 'name': body.name}"
+  ],
+  "cheat": [
+   "@app.put('/items/{item_id}')",
+   "def update(item_id: int, body: Upd):   # путь + тело в одной функции",
+   "    ..."
+  ],
+  "template": [
+   "from fastapi import FastAPI",
+   "from pydantic import BaseModel",
+   "",
+   "app = FastAPI()",
+   "",
+   "# твой код"
+  ],
+  "type": "fastapi",
+  "checks": [
+   {
+    "endpoint": "/items/5",
+    "method": "PUT",
+    "payload": {
+     "name": "Updated"
+    },
+    "expected_json": {
+     "item_id": 5,
+     "name": "Updated"
+    }
+   },
+   {
+    "endpoint": "/items/9",
+    "method": "PUT",
+    "payload": {
+     "name": "Other"
+    },
+    "expected_json": {
+     "item_id": 9,
+     "name": "Other"
+    }
+   }
+  ]
+ }
+]
